@@ -32,8 +32,6 @@ for row in contents:
     (row[:13]))
 
 
-# cursor.execute("INSERT INTO ufc_stats_table VALUES (1, 'NATE DIAZ', '1926', '.538', '17', '.262', '3', '15', '6', '9')")
-
 
 
 connection.commit()
