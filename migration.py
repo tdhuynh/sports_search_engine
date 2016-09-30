@@ -29,6 +29,7 @@ with open('stats.csv') as file:
     contents = list(csv.reader(file))
 for row in contents:
     cursor.execute("INSERT INTO ufc_stats_table VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (row[:13]))
+
 connection.commit()
 
 cursor.close()
