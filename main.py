@@ -1,4 +1,9 @@
 import psycopg2
+import sys
+import csv
+
+# manually start:      pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+
 
 connection = psycopg2.connect("dbname=ufc_allweights_stats user=ufc_allweights_stats")
 cursor = connection.cursor()
@@ -83,20 +88,26 @@ def submissions():
 def help_initials():
     if look_up == 'h':
         print("""
-         [fn] first name\n
-         [ln] last name\n
-         [f] fights\n
-         [s] strikes\n
-         [sa] strike accuracy\n
-         [t] takedowns\n
-         [ta] takedown accuracy\n
-         [k] knockdowns\n
-         [p] passes\n
-         [r] reversals\n
-         [su] submissions\n
+         Type the letter(s) in the bracket to search by that criteria:
+         [fn] first name
+         [ln] last name
+         [f] fights
+         [s] strikes
+         [sa] strike accuracy
+         [t] takedowns
+         [ta] takedown accuracy
+         [k] knockdowns
+         [p] passes
+         [r] reversals
+         [su] submissions
          """)
 
-def categories():
+def create_user():
+    with open(stats.csv, 'a') as write_file:
+        contents = csv.writer(write_file)
+
+
+def stat_categories():
     first_name()
     last_name()
     fights()
@@ -108,19 +119,24 @@ def categories():
     passes()
     reversals()
     submissions()
-    help_initials()
 
 
-print("Welcome to a Sports Database!")
 
-look_up_list = ['fn', 'ln', 'f', 's', 'sa', 't', 'ta', 'k', 'p', 'r', 'su', 'h']
+print("Welcome to a UFC All Weights Database! Here, you can look up stats of different fighters.")
+
+look_up_list = ['fn', 'ln', 'f', 's', 'sa', 't', 'ta', 'k', 'p', 'r', 'su']
+
 while True:
-    look_up = input("How would you like to look up a fighter's stats? Type 'H' for help.\n>>> ")
-
+    look_up = input("What would you like to do? Type 'h' for a list of commands, 'q' to quit, or 'c' to create a new data row.\n>>> ")
     if look_up.lower() in look_up_list:
-        categories()
+        stat_categories()
+    elif look_up.lower() == 'h':
+        help_initials()
+    elif look_up.lower() == 'c':
+        pass
     else:
-        print("Please type a correct command.")
+        print("Goodbye.")
+        sys.exit()
 
 
 

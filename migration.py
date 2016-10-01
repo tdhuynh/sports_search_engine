@@ -14,9 +14,9 @@ CREATE TABLE ufc_stats_table (
     last_name VARCHAR(20),
     fights SMALLINT,
     strikes SMALLINT,
-    strike_accuracy NUMERIC(3,3),
+    strike_accuracy REAL,
     takedowns SMALLINT,
-    takedown_accuracy NUMERIC(3,3),
+    takedown_accuracy REAL,
     knockdowns SMALLINT,
     passes SMALLINT,
     reversals SMALLINT,
@@ -26,9 +26,9 @@ CREATE TABLE ufc_stats_table (
 cursor.execute(create_table_command)
 
 with open('stats.csv') as file:
-    contents = list(csv.reader(file))
-for row in contents:
-    cursor.execute("INSERT INTO ufc_stats_table VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (row[:13]))
+    contents = csv.reader(file)
+    for row in contents:
+        cursor.execute("INSERT INTO ufc_stats_table VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (row[:13]))
 
 connection.commit()
 
