@@ -1,9 +1,7 @@
 import psycopg2
 import sys
-import csv
 
-# manually start:      pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
-
+# manually start:  pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
 
 connection = psycopg2.connect("dbname=ufc_allweights_stats user=ufc_allweights_stats")
 cursor = connection.cursor()
@@ -102,10 +100,29 @@ def help_initials():
          [su] submissions
          """)
 
-def create_user():
-    with open(stats.csv, 'a') as write_file:
-        contents = csv.writer(write_file)
+def create_new_data():
+    print("Follow the prompts below to create a new player data row.")
+    new_id = 11
+    new_fn = input("Fighter first name: ").upper()
+    new_ln = input("Fighter last name: ").upper()
+    new_fights = input("Number of fights: ")
+    new_strikes = input("Number of strikes: ")
+    new_strike_acc = input("Strike accuracy: ")
+    new_takedowns = input("Number of takedowns: ")
+    new_takedown_acc = input("Takedown accuracy: ")
+    new_knockdowns = input("Number of knockdowns: ")
+    new_passes = input("Number of passes: ")
+    new_reversals = input("Number of reversals: ")
+    new_submissions = input("Number of submissions: ")
 
+    cursor.execute("SELECT * FROM ufc_stats_table;")
+    results = cursor.fetchall()
+    for row in results:
+        if new_id == row[0]:
+            new_id += 1
+
+    cursor.execute("INSERT INTO ufc_stats_table VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+    (new_id,new_fn,new_ln,new_fights,new_strikes,new_strike_acc,new_takedowns,new_takedown_acc,new_knockdowns,new_passes,new_reversals,new_submissions))
 
 def stat_categories():
     first_name()
@@ -120,30 +137,21 @@ def stat_categories():
     reversals()
     submissions()
 
+print("Welcome to a UFC All Weights Database! Here, you can look up stats of different fighters.\n")
 
-
-print("Welcome to a UFC All Weights Database! Here, you can look up stats of different fighters.")
-
-look_up_list = ['fn', 'ln', 'f', 's', 'sa', 't', 'ta', 'k', 'p', 'r', 'su']
-
+look_up_list = ['fn', 'ln', 'f', 's', 'sa', 't', 'ta', 'k', 'p', 'r', 'su', 'h']
 while True:
-    look_up = input("What would you like to do? Type 'h' for a list of commands, 'q' to quit, or 'c' to create a new data row.\n>>> ")
-    if look_up.lower() in look_up_list:
+    look_up = input("What would you like to do? Type 'h' for a list of commands, 'c' to create new data row, or 'q' to quit.\n>>> ").lower()
+    if look_up in look_up_list:
         stat_categories()
-    elif look_up.lower() == 'h':
-        help_initials()
     elif look_up.lower() == 'c':
-        pass
-    else:
+        create_new_data()
+    elif look_up.lower() == 'q':
         print("Goodbye.")
         sys.exit()
-
-
-
-
-
+    else:
+        print("Please input an appropriate command.")
 
 connection.commit()
-
 cursor.close()
 connection.close()
