@@ -123,6 +123,7 @@ def create_new_data():
 
     cursor.execute("INSERT INTO ufc_stats_table VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
     (new_id,new_fn,new_ln,new_fights,new_strikes,new_strike_acc,new_takedowns,new_takedown_acc,new_knockdowns,new_passes,new_reversals,new_submissions))
+    connection.commit()
 
 def stat_categories():
     first_name()
