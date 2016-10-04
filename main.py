@@ -137,6 +137,7 @@ def stat_categories():
     passes()
     reversals()
     submissions()
+    help_initials()
 
 print("Welcome to a UFC All Weights Database! Here, you can look up stats of different fighters.\n")
 
